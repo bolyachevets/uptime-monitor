@@ -296,7 +296,7 @@ jobs:
           ref: \${{ github.head_ref }}
           token: \${{ secrets.GH_PAT }}
       - name: Update code
-        uses: bolyachevets/updates@master
+        uses: upptime/updates@master
         env:
           GH_PAT: \${{ secrets.GH_PAT }}
 `;
