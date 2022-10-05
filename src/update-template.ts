@@ -1,5 +1,5 @@
 import slugify from "@sindresorhus/slugify";
-import { ensureDir, readdir, remove, writeFile } from "fs-extra";
+import { ensureDir, readdir, remove, writeFile,readFileSync } from "fs-extra";
 import { join } from "path";
 import { getConfig } from "./helpers/config";
 import { commit, push } from "./helpers/git";
@@ -19,6 +19,9 @@ import {
 export const updateTemplate = async () => {
   const [owner, repo] = getOwnerRepo();
   const config = await getConfig();
+
+  console.log(owner);
+  console.log(repo);
 
   // Remove our workflows (not all workflows)
   await remove(join(".", ".github", "workflows", "graphs.yml"));
@@ -47,6 +50,8 @@ export const updateTemplate = async () => {
   );
   await writeFile(join(".", ".github", "workflows", "updates.yml"), await updatesCiWorkflow());
   await writeFile(join(".", ".github", "workflows", "uptime.yml"), await uptimeCiWorkflow());
+  const updates_content = readFileSync(join(".", ".github", "workflows", "updates.yml"),'utf8');
+  console.log(updates_content);
   console.log("Added new .github/workflows");
 
   // Delete these specific template files
