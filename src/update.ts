@@ -502,8 +502,10 @@ generator: Upptime <https://github.com/upptime/upptime>
                });
 
               console.log("Testing array of comments");
-              for (const c of comments) {
-                console.log(c);
+              if (omments.data.length) {
+                for (const c of comments.data) {
+                  console.log(c);
+                }
               }
 
               // TODO filter uniqueByNumberSorted by numbers not in the comments
