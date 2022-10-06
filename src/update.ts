@@ -466,13 +466,13 @@ generator: Upptime <https://github.com/upptime/upptime>
           // length of currentIssues is at most 1
           if (currentIssues.data.length) {
 
-            for await (const issue of currentIssues.data) {
+            for (const issue of currentIssues.data) {
 
               // console.log(issue);
 
               let relevantIssues: Array<any> = [];
 
-              for await (const label of site.labels) {
+              for (const label of site.labels) {
                 const labeledIssues = await octokit.issues.listForRepo({
                   owner: site.owner,
                   repo: site.repo,
@@ -488,7 +488,9 @@ generator: Upptime <https://github.com/upptime/upptime>
 
               const unique = [...new Set(relevantIssues.flat(1).map(item => item.number))];
 
-              // console.log(intersection[0]);
+              for (const issue of unique) {
+                console.log(issue);
+              }
             }
           }
         }
