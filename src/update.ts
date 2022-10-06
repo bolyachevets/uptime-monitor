@@ -479,10 +479,7 @@ generator: Upptime <https://github.com/upptime/upptime>
                   direction: "desc",
                   labels: label,
                 });
-                relevantIssues.push(labeledIssues.data.map(function(item) {
-                      return item.html_url;
-                    });
-                  );
+                relevantIssues.push(labeledIssues.data.map(i => i.html_url));
               };
 
               console.log("relevantIssues");
