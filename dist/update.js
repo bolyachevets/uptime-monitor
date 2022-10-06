@@ -434,18 +434,12 @@ generator: Upptime <https://github.com/upptime/upptime>
                                     direction: "desc",
                                     labels: label,
                                 });
-                                relevantIssues.push(labeledIssues.data);
+                                relevantIssues.push(labeledIssues.data.map(i => i.html_url));
                             }
                             ;
-                            // TODO Does not map to real issue number
-                            const uniqueByNumber = new Map(relevantIssues.flat().map(issue => [issue.number, issue]));
-                            console.log("uniqueByNumber");
-                            console.log(uniqueByNumber);
-                            // TODO we need to keep items that have all the labels
-                            const issueArray = Array.from(uniqueByNumber.values());
-                            var issueUrls = issueArray.map(function (item) {
-                                return item['html_url'];
-                            });
+                            console.log("relevantIssues");
+                            console.log(relevantIssues);
+                            let issueUrls = relevantIssues.reduce((a, b) => a.filter((c) => b.includes(c)));
                             console.log("issueUrls");
                             console.log(issueUrls);
                             const comments = await octokit.issues.listComments({
@@ -453,8 +447,8 @@ generator: Upptime <https://github.com/upptime/upptime>
                                 repo,
                                 issue_number: issue.number,
                             });
-                            const commentBodies = comments.data.map(i => i.body);
-                            const missing = issueUrls.filter(i => commentBodies.indexOf(i) < 0);
+                            const commentBodies = comments.data.map((i) => i.body);
+                            const missing = issueUrls.filter((i) => commentBodies.indexOf(i) < 0);
                             console.log("Add missing tagged issues to comments");
                             if (missing.length) {
                                 for (const c of missing) {
