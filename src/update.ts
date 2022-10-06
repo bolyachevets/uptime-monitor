@@ -493,7 +493,7 @@ generator: Upptime <https://github.com/upptime/upptime>
 
               // const unique = [...new Set(relevantIssues.flat(1).map(item => item.number))];
 
-              const uniqueByNumber = [...new Map(array.map(issue => [issue['number'], issue])).values()];
+              const uniqueByNumber = [...new Map(relevantIssues.map(issue => [issue['number'], issue])).values()];
               const uniqueByNumberSorted = new Map([...uniqueByNumber.entries()].sort());
 
               // TODO add as comments to the parent issue in the dashboard if new issue
