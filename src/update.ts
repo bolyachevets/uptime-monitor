@@ -449,8 +449,6 @@ generator: Upptime <https://github.com/upptime/upptime>
       } else {
         console.log("Skipping commit, ", "status is", status);
         if (status === "down" || status === "degraded") {
-          // pull issues
-          // TODO filter by date since the service was recorded as flaky
 
           const currentIssues = await octokit.issues.listForRepo({
             owner,
@@ -489,11 +487,7 @@ generator: Upptime <https://github.com/upptime/upptime>
               const uniqueByNumber = [...new Map(relevantIssues.map(issue => [issue['number'], issue])).values()];
               const uniqueByNumberSorted = new Map([...uniqueByNumber.entries()].sort());
 
-              // TODO add as comments to the parent issue in the dashboard if new issue
-
-              console.log("Testing array of unique values");
-              Array.from(uniqueByNumberSorted.values()).forEach(value =>
-                console.log(value));
+              const issueUrls = uniqueByNumberSorted.map(i => i.html_url)
 
               const comments = await octokit.issues.listComments({
                 owner,
@@ -501,14 +495,21 @@ generator: Upptime <https://github.com/upptime/upptime>
                 issue_number: issue.number,
                });
 
-              console.log("Testing array of comments");
-              if (comments.data.length) {
-                for (const c of comments.data) {
-                  console.log(c);
+              const commentBodies = comments.data.map(i => i.body);
+
+              const missing = issueUrls.filter(item => commentBodies.indexOf(item) < 0);
+
+              console.log("Add missing tagged issues to comments");
+              if (missing.length) {
+                for (const c of missing) {
+                  await octokit.issues.createComment({
+                    owner,
+                    repo,
+                    issue_number: issue.number,
+                    body: c,
+                  });
                 }
               }
-
-              // TODO filter uniqueByNumberSorted by numbers not in the comments
             }
           }
         }
