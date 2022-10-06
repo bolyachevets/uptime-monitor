@@ -502,7 +502,7 @@ generator: Upptime <https://github.com/upptime/upptime>
                });
 
               console.log("Testing array of comments");
-              if (omments.data.length) {
+              if (comments.data.length) {
                 for (const c of comments.data) {
                   console.log(c);
                 }
