@@ -463,19 +463,24 @@ generator: Upptime <https://github.com/upptime/upptime>
             per_page: 1,
           });
 
-          // Need to check issue numbers
-          console.log(currentIssues[0].data);
+          if (issues.data.length) {
 
-          const openIssues = await octokit.issues.listForRepo({
-            owner: site.owner,
-            repo: site.repo,
-            state: "open",
-            filter: "all",
-            since: currentIssues[0].data.created_at,
-            sort: "created",
-            direction: "desc",
-            labels: ["OPS"],
-          });
+            // Need to check issue numbers
+            console.log(currentIssues.data[0]);
+
+            const openIssues = await octokit.issues.listForRepo({
+              owner: site.owner,
+              repo: site.repo,
+              state: "open",
+              filter: "all",
+              since: currentIssues.data[0].created_at,
+              sort: "created",
+              direction: "desc",
+              labels: "OPS",
+            });
+
+            console.log(openIssues.data[0]);
+          }
         }
       }
     } catch (error) {
