@@ -440,16 +440,23 @@ generator: Upptime <https://github.com/upptime/upptime>
                                 relevantIssues.push(labeledIssues.data);
                             }
                             ;
-                            console.log("Testing array of duplicates");
-                            for (const issue of relevantIssues) {
-                                console.log(issue);
-                            }
-                            // const unique = [...new Set(relevantIssues.flat(1).map(item => item.number))];
                             const uniqueByNumber = [...new Map(relevantIssues.map(issue => [issue['number'], issue])).values()];
                             const uniqueByNumberSorted = new Map([...uniqueByNumber.entries()].sort());
                             // TODO add as comments to the parent issue in the dashboard if new issue
                             console.log("Testing array of unique values");
                             Array.from(uniqueByNumberSorted.values()).forEach(value => console.log(value));
+                            const comments = await octokit.issues.listComments({
+                                owner,
+                                repo,
+                                issue_number: issue.number,
+                            });
+                            console.log("Testing array of comments");
+                            if (comments.data.length) {
+                                for (const c of comments.data) {
+                                    console.log(c);
+                                }
+                            }
+                            // TODO filter uniqueByNumberSorted by numbers not in the comments
                         }
                     }
                 }
