@@ -408,6 +408,10 @@ generator: Upptime <https://github.com/upptime/upptime>
             }
             else {
                 console.log("Skipping commit, ", "status is", status);
+                if (status === "down" || status === "degraded") {
+                    // TODO pull tickets
+                    console.log("Repo is:", site.repo);
+                }
             }
         }
         catch (error) {
