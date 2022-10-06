@@ -498,7 +498,8 @@ generator: Upptime <https://github.com/upptime/upptime>
               const comments = await octokit.issues.listComments({
                 owner,
                 repo,
-                issue.number });
+                issue_number: issue.number,
+               });
 
               console.log("Testing array of comments");
               for (const c of comments) {
