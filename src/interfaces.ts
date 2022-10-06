@@ -9,6 +9,7 @@ export interface UpptimeConfig {
     url: string;
     owner: string;
     repo: string;
+    labels?: string[];
     port?: number;
     expectedStatusCodes?: number[];
     assignees?: string[];

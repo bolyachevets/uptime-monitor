@@ -463,43 +463,35 @@ generator: Upptime <https://github.com/upptime/upptime>
             per_page: 1,
           });
 
+          // length of currentIssues is at most 1
           if (currentIssues.data.length) {
 
             for await (const issue of currentIssues.data) {
 
-              // Need to check issue numbers
               // console.log(issue);
 
-              const openOPSIssues = await octokit.issues.listForRepo({
-                owner: site.owner,
-                repo: site.repo,
-                state: "open",
-                filter: "all",
-                since: issue.created_at,
-                sort: "created",
-                direction: "desc",
-                labels: "OPS",
-              });
+              relevantIssues = new Array();
 
-              const openHiPriorityIssues = await octokit.issues.listForRepo({
-                owner: site.owner,
-                repo: site.repo,
-                state: "open",
-                filter: "all",
-                since: issue.created_at,
-                sort: "created",
-                direction: "desc",
-                labels: "High Priority",
-              });
+              for await (const label in site.labels) {
 
-              if (openOPSIssues.data.length && openHiPriorityIssues.data.length) {
-                 const ops = openOPSIssues.data;
-                 const hiPriority = openHiPriorityIssues.data;
-                 const intersection = ops.filter(x => {
-                     return hiPriority.some(y => y.number === x.number);
+                relevantIssues.push(
+                  await octokit.issues.listForRepo({
+                    owner: site.owner,
+                    repo: site.repo,
+                    state: "open",
+                    filter: "all",
+                    since: issue.created_at,
+                    sort: "created",
+                    direction: "desc",
+                    labels: label,
                   });
-                 console.log(intersection[0]);
+                );
               }
+
+              let intersection = relevantIssues.reduce((a, b) => a.filter(x => {
+                       return b.some(y => y.number === x.number);
+                    }));
+              console.log(intersection[0]);
             }
           }
         }
