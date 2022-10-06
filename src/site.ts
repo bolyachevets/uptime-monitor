@@ -9,7 +9,7 @@ export const generateSite = async () => {
   const [owner, repo] = getOwnerRepo();
   const config = await getConfig();
   if (config.skipGeneratingWebsite) return;
-  const sitePackage = config.customStatusWebsitePackage || "@upptime/status-page";
+  const sitePackage = config.customStatusWebsitePackage || "@bolyachevets/status-page";
   const octokit = await getOctokit();
   const repoDetails = await octokit.repos.get({ owner, repo });
   const siteDir = "site";
