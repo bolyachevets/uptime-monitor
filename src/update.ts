@@ -468,9 +468,9 @@ generator: Upptime <https://github.com/upptime/upptime>
             for await (const issue of currentIssues.data) {
 
               // Need to check issue numbers
-              console.log(issue);
+              // console.log(issue);
 
-              const openIssues = await octokit.issues.listForRepo({
+              const openOPSIssues = await octokit.issues.listForRepo({
                 owner: site.owner,
                 repo: site.repo,
                 state: "open",
@@ -478,11 +478,28 @@ generator: Upptime <https://github.com/upptime/upptime>
                 since: issue.created_at,
                 sort: "created",
                 direction: "desc",
-                labels: "OPS, High Priority",
+                labels: "OPS",
               });
 
-              console.log(openIssues.data[0]);
+              const openHiPriorityIssues = await octokit.issues.listForRepo({
+                owner: site.owner,
+                repo: site.repo,
+                state: "open",
+                filter: "all",
+                since: issue.created_at,
+                sort: "created",
+                direction: "desc",
+                labels: "High Priority",
+              });
 
+              if (openOPSIssues.data.length && openHiPriorityIssues.data.length) {
+                 const ops = openOPSIssues.data;
+                 const hiPriority = openHiPriorityIssues.data;
+                 const intersection = ops.filter(x => {
+                     return hiPriority.some(y => y.number === x.number);
+                  });
+                 console.log(intersection[0]);
+              }
             }
           }
         }
