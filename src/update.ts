@@ -485,7 +485,7 @@ generator: Upptime <https://github.com/upptime/upptime>
               console.log("relevantIssues");
               console.log(relevantIssues);
 
-              let issueUrls = relevantIssues.reduce((a, b) => a.filter(c => b.includes(c)));
+              let issueUrls = relevantIssues.reduce((a, b) => a.filter((c: String) => b.includes(c)));
 
               console.log("issueUrls");
               console.log(issueUrls);
@@ -496,7 +496,7 @@ generator: Upptime <https://github.com/upptime/upptime>
                 issue_number: issue.number,
                });
 
-              const commentBodies = comments.data.map(i => i.body);
+              const commentBodies = comments.data.map((i: any) => i.body);
               const missing = issueUrls.filter(i => commentBodies.indexOf(i) < 0);
 
               console.log("Add missing tagged issues to comments");
