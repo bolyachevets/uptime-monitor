@@ -437,18 +437,14 @@ generator: Upptime <https://github.com/upptime/upptime>
                                 relevantIssues.push(labeledIssues.data.map(i => i.html_url));
                             }
                             ;
-                            console.log("relevantIssues");
-                            console.log(relevantIssues);
-                            let issueUrls = relevantIssues.reduce((a, b) => a.filter((c) => b.includes(c)));
-                            console.log("issueUrls");
-                            console.log(issueUrls);
+                            const allLabelsMatchedIssues = relevantIssues.reduce((a, b) => a.filter((c) => b.includes(c)));
                             const comments = await octokit.issues.listComments({
                                 owner,
                                 repo,
                                 issue_number: issue.number,
                             });
                             const commentBodies = comments.data.map((i) => i.body);
-                            const missing = issueUrls.filter((i) => commentBodies.indexOf(i) < 0);
+                            const missing = allLabelsMatchedIssues.filter((i) => commentBodies.indexOf(i) < 0);
                             console.log("Add missing tagged issues to comments");
                             if (missing.length) {
                                 for (const c of missing) {
