@@ -473,19 +473,17 @@ generator: Upptime <https://github.com/upptime/upptime>
               relevantIssues = new Array();
 
               for await (const label of site.labels) {
-
-                relevantIssues.push(
-                  await octokit.issues.listForRepo({
-                    owner: site.owner,
-                    repo: site.repo,
-                    state: "open",
-                    filter: "all",
-                    since: issue.created_at,
-                    sort: "created",
-                    direction: "desc",
-                    labels: label,
-                  });
-                );
+                const labeledIssues = await octokit.issues.listForRepo({
+                  owner: site.owner,
+                  repo: site.repo,
+                  state: "open",
+                  filter: "all",
+                  since: issue.created_at,
+                  sort: "created",
+                  direction: "desc",
+                  labels: label,
+                });
+                relevantIssues.push(labeledIssues);
               };
 
               let intersection = relevantIssues.reduce((a, b) => a.filter(x => {
