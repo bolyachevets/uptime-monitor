@@ -483,7 +483,7 @@ generator: Upptime <https://github.com/upptime/upptime>
                   direction: "desc",
                   labels: label,
                 });
-                relevantIssues.push(labeledIssues);
+                relevantIssues.push(labeledIssues.data);
               };
 
               let intersection = relevantIssues.reduce((a, b) => a.filter(x => {
