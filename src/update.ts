@@ -472,7 +472,7 @@ generator: Upptime <https://github.com/upptime/upptime>
 
               relevantIssues = new Array();
 
-              for await (const label in site.labels) {
+              for await (const label of site.labels) {
 
                 relevantIssues.push(
                   await octokit.issues.listForRepo({
@@ -486,7 +486,7 @@ generator: Upptime <https://github.com/upptime/upptime>
                     labels: label,
                   });
                 );
-              }
+              };
 
               let intersection = relevantIssues.reduce((a, b) => a.filter(x => {
                        return b.some(y => y.number === x.number);
