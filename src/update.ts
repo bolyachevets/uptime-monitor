@@ -486,10 +486,14 @@ generator: Upptime <https://github.com/upptime/upptime>
 
               const uniqueByNumber = [...new Map(relevantIssues.map(issue => [issue['number'], issue])).values()];
               const uniqueByNumberSorted = new Map([...uniqueByNumber.entries()].sort());
+              console.log("Debug unique issues");
+              console.log(uniqueByNumberSorted);
 
-              const issueUrls = Array.from(uniqueByNumberSorted.values()).map(i => i.html_url)
-              console.log("issue issueUrls")
-              console.log(issueUrls)
+              const issueArray = Array.from(uniqueByNumberSorted.values());
+              console.log(issueArray);
+              const issueUrls = issueArray.map(i => i.html_url);
+              console.log("issue issueUrls");
+              console.log(issueUrls);
 
               const comments = await octokit.issues.listComments({
                 owner,
@@ -498,8 +502,8 @@ generator: Upptime <https://github.com/upptime/upptime>
                });
 
               const commentBodies = comments.data.map(i => i.body);
-              console.log("comment bodies")
-              console.log(commentBodies)
+              console.log("comment bodies");
+              console.log(commentBodies);
 
               const missing = issueUrls.filter(i => commentBodies.indexOf(i) < 0);
 
