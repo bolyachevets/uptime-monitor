@@ -470,7 +470,7 @@ generator: Upptime <https://github.com/upptime/upptime>
 
               // console.log(issue);
 
-              let relevantIssues: Array<any>;
+              let relevantIssues: Array<any> = [];
 
               for await (const label of site.labels) {
                 const labeledIssues = await octokit.issues.listForRepo({
