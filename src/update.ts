@@ -449,8 +449,33 @@ generator: Upptime <https://github.com/upptime/upptime>
       } else {
         console.log("Skipping commit, ", "status is", status);
         if (status === "down" || status === "degraded") {
-          // TODO pull tickets
-          console.log("Repo is:", site.repo)
+          // pull issues
+          // TODO filter by date since the service was recorded as flaky
+
+          const currentIssues = await octokit.issues.listForRepo({
+            owner,
+            repo,
+            labels: slug,
+            filter: "all",
+            state: "open",
+            sort: "created",
+            direction: "desc",
+            per_page: 1,
+          });
+
+          // Need to check issue numbers
+          console.log(currentIssues[0].data)
+
+          const openIssues = await octokit.issues.listForRepo({
+                  site.owner,
+                  site.repo,
+                  state: "open",
+                  filter: "all",
+                  since: currentIssues[0].data.created_at,
+                  sort: "created",
+                  direction: "desc",
+                  labels: ["OPS"]
+          });
         }
       }
     } catch (error) {
