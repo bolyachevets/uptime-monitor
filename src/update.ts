@@ -497,7 +497,7 @@ generator: Upptime <https://github.com/upptime/upptime>
                });
 
               const commentBodies = comments.data.map((i: any) => i.body);
-              const missing = issueUrls.filter(i => commentBodies.indexOf(i) < 0);
+              const missing = issueUrls.filter((i: String) => commentBodies.indexOf(i) < 0);
 
               console.log("Add missing tagged issues to comments");
               if (missing.length) {
