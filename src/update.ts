@@ -470,7 +470,7 @@ generator: Upptime <https://github.com/upptime/upptime>
 
               // console.log(issue);
 
-              let relevantIssues: [][] = [];
+              let relevantIssues: Array<any>;
 
               for await (const label of site.labels) {
                 const labeledIssues = await octokit.issues.listForRepo({
@@ -486,10 +486,9 @@ generator: Upptime <https://github.com/upptime/upptime>
                 relevantIssues.push(labeledIssues.data);
               };
 
-              let intersection = relevantIssues.reduce((a, b) => a.filter(x => {
-                       return b.some(y => y.number === x.number);
-                    }));
-              console.log(intersection[0]);
+              const unique = [...new Set(relevantIssues.flat(1).map(item => item.number))];
+
+              // console.log(intersection[0]);
             }
           }
         }
