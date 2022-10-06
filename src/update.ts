@@ -488,6 +488,8 @@ generator: Upptime <https://github.com/upptime/upptime>
               const uniqueByNumberSorted = new Map([...uniqueByNumber.entries()].sort());
 
               const issueUrls = Array.from(uniqueByNumberSorted.values()).map(i => i.html_url)
+              console.log("issue issueUrls")
+              console.log(issueUrls)
 
               const comments = await octokit.issues.listComments({
                 owner,
@@ -496,12 +498,15 @@ generator: Upptime <https://github.com/upptime/upptime>
                });
 
               const commentBodies = comments.data.map(i => i.body);
+              console.log("comment bodies")
+              console.log(commentBodies)
 
               const missing = issueUrls.filter(i => commentBodies.indexOf(i) < 0);
 
               console.log("Add missing tagged issues to comments");
               if (missing.length) {
                 for (const c of missing) {
+                  console.log(c)
                   await octokit.issues.createComment({
                     owner,
                     repo,
