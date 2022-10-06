@@ -422,7 +422,6 @@ generator: Upptime <https://github.com/upptime/upptime>
                     // length of currentIssues is at most 1
                     if (currentIssues.data.length) {
                         for (const issue of currentIssues.data) {
-                            // console.log(issue);
                             let relevantIssues = [];
                             for (const label of site.labels) {
                                 const labeledIssues = await octokit.issues.listForRepo({
@@ -438,16 +437,16 @@ generator: Upptime <https://github.com/upptime/upptime>
                                 relevantIssues.push(labeledIssues.data);
                             }
                             ;
-                            const uniqueByNumber = [...new Map(relevantIssues.flat().map(issue => [issue.number, issue])).values()];
-                            const uniqueByNumberSorted = new Map([...uniqueByNumber.entries()].sort());
-                            console.log("Debug unique issues");
-                            console.log(uniqueByNumberSorted);
-                            const issueArray = Array.from(uniqueByNumberSorted.values());
-                            console.log(issueArray);
+                            // TODO Does not map to real issue number
+                            const uniqueByNumber = new Map(relevantIssues.flat().map(issue => [issue.number, issue]));
+                            console.log("uniqueByNumber");
+                            console.log(uniqueByNumber);
+                            // TODO we need to keep items that have all the labels
+                            const issueArray = Array.from(uniqueByNumber.values());
                             var issueUrls = issueArray.map(function (item) {
                                 return item['html_url'];
                             });
-                            console.log("issue issueUrls");
+                            console.log("issueUrls");
                             console.log(issueUrls);
                             const comments = await octokit.issues.listComments({
                                 owner,
@@ -455,8 +454,6 @@ generator: Upptime <https://github.com/upptime/upptime>
                                 issue_number: issue.number,
                             });
                             const commentBodies = comments.data.map(i => i.body);
-                            console.log("comment bodies");
-                            console.log(commentBodies);
                             const missing = issueUrls.filter(i => commentBodies.indexOf(i) < 0);
                             console.log("Add missing tagged issues to comments");
                             if (missing.length) {
