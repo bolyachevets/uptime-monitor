@@ -438,7 +438,7 @@ generator: Upptime <https://github.com/upptime/upptime>
                                 relevantIssues.push(labeledIssues.data);
                             }
                             ;
-                            const uniqueByNumber = [...new Map(relevantIssues.map(issue => [issue.number, issue])).values()];
+                            const uniqueByNumber = [...new Map(relevantIssues.flat().map(issue => [issue.number, issue])).values()];
                             const uniqueByNumberSorted = new Map([...uniqueByNumber.entries()].sort());
                             console.log("Debug unique issues");
                             console.log(uniqueByNumberSorted);
