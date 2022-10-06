@@ -484,14 +484,16 @@ generator: Upptime <https://github.com/upptime/upptime>
                 relevantIssues.push(labeledIssues.data);
               };
 
-              const uniqueByNumber = [...new Map(relevantIssues.map(issue => [issue['number'], issue])).values()];
+              const uniqueByNumber = [...new Map(relevantIssues.map(issue => [issue.number, issue])).values()];
               const uniqueByNumberSorted = new Map([...uniqueByNumber.entries()].sort());
               console.log("Debug unique issues");
               console.log(uniqueByNumberSorted);
 
               const issueArray = Array.from(uniqueByNumberSorted.values());
               console.log(issueArray);
-              const issueUrls = issueArray.map(i => i.html_url);
+              var issueUrls = issueArray.map(function(item) {
+                    return item['html_url'];
+                  });
               console.log("issue issueUrls");
               console.log(issueUrls);
 
