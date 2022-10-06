@@ -464,17 +464,17 @@ generator: Upptime <https://github.com/upptime/upptime>
           });
 
           // Need to check issue numbers
-          console.log(currentIssues[0].data)
+          console.log(currentIssues[0].data);
 
           const openIssues = await octokit.issues.listForRepo({
-                  site.owner,
-                  site.repo,
-                  state: "open",
-                  filter: "all",
-                  since: currentIssues[0].data.created_at,
-                  sort: "created",
-                  direction: "desc",
-                  labels: ["OPS"]
+            owner: site.owner,
+            repo: site.repo,
+            state: "open",
+            filter: "all",
+            since: currentIssues[0].data.created_at,
+            sort: "created",
+            direction: "desc",
+            labels: ["OPS"],
           });
         }
       }
