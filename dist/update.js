@@ -433,7 +433,7 @@ generator: Upptime <https://github.com/upptime/upptime>
                                 since: issue.created_at,
                                 sort: "created",
                                 direction: "desc",
-                                labels: "OPS",
+                                labels: "OPS, High Priority",
                             });
                             console.log(openIssues.data[0]);
                         }
