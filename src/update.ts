@@ -479,20 +479,17 @@ generator: Upptime <https://github.com/upptime/upptime>
                   direction: "desc",
                   labels: label,
                 });
-                relevantIssues.push(labeledIssues.data);
+                relevantIssues.push(labeledIssues.data.map(function(item) {
+                      return item.html_url;
+                    });
+                  );
               };
 
-              // TODO Does not map to real issue number
-              const uniqueByNumber = new Map(relevantIssues.flat().map(issue => [issue.number, issue]));
-              console.log("uniqueByNumber");
-              console.log(uniqueByNumber);
+              console.log("relevantIssues");
+              console.log(relevantIssues);
 
-              // TODO we need to keep items that have all the labels
+              let issueUrls = relevantIssues.reduce((a, b) => a.filter(c => b.includes(c)));
 
-              const issueArray = Array.from(uniqueByNumber.values());
-              var issueUrls = issueArray.map(function(item) {
-                    return item['html_url'];
-                  });
               console.log("issueUrls");
               console.log(issueUrls);
 
