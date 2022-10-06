@@ -421,38 +421,27 @@ generator: Upptime <https://github.com/upptime/upptime>
                         direction: "desc",
                         per_page: 1,
                     });
+                    // length of currentIssues is at most 1
                     if (currentIssues.data.length) {
                         for await (const issue of currentIssues.data) {
-                            // Need to check issue numbers
                             // console.log(issue);
-                            const openOPSIssues = await octokit.issues.listForRepo({
-                                owner: site.owner,
-                                repo: site.repo,
-                                state: "open",
-                                filter: "all",
-                                since: issue.created_at,
-                                sort: "created",
-                                direction: "desc",
-                                labels: "OPS",
-                            });
-                            const openHiPriorityIssues = await octokit.issues.listForRepo({
-                                owner: site.owner,
-                                repo: site.repo,
-                                state: "open",
-                                filter: "all",
-                                since: issue.created_at,
-                                sort: "created",
-                                direction: "desc",
-                                labels: "High Priority",
-                            });
-                            if (openOPSIssues.data.length && openHiPriorityIssues.data.length) {
-                                const ops = openOPSIssues.data;
-                                const hiPriority = openHiPriorityIssues.data;
-                                const intersection = ops.filter(x => {
-                                    return hiPriority.some(y => y.number === x.number);
+                            let relevantIssues = [];
+                            for await (const label of site.labels) {
+                                const labeledIssues = await octokit.issues.listForRepo({
+                                    owner: site.owner,
+                                    repo: site.repo,
+                                    state: "open",
+                                    filter: "all",
+                                    since: issue.created_at,
+                                    sort: "created",
+                                    direction: "desc",
+                                    labels: label,
                                 });
-                                console.log(intersection[0]);
+                                relevantIssues.push(labeledIssues.data);
                             }
+                            ;
+                            const unique = [...new Set(relevantIssues.flat(1).map(item => item.number))];
+                            // console.log(intersection[0]);
                         }
                     }
                 }
