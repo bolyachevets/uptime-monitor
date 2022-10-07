@@ -245,7 +245,7 @@ const update = async (shouldCommit = false) => {
         const performManualCheck = async () => {
             let status = "up";
             let code = 200;
-            const labels = ['status-switch', slug];
+            const labels = ['status-switch', 'status', slug];
             let relevantIssues = [];
             for (const label of labels) {
                 const labeledIssues = await octokit.issues.listForRepo({
