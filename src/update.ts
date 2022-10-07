@@ -267,7 +267,7 @@ export const update = async (shouldCommit = false) => {
         let status: "up" | "down" | "degraded" = "up";
         let code = 200;
 
-        const labels = ['status-switch', slug]
+        const labels = ['status-switch', 'status', slug]
 
         let relevantIssues: Array<any> = [];
 
