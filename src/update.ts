@@ -257,7 +257,7 @@ export const update = async (shouldCommit = false) => {
       }
     };
 
-    const performManualCheck = ():
+    const performManualCheck = async ():
       {
         result: {
           httpCode: number;
@@ -296,7 +296,7 @@ export const update = async (shouldCommit = false) => {
         return { result: { httpCode: code }, responseTime: (0).toFixed(0), status };
     };
 
-    let { result, responseTime, status } = !site.isManualCheck ? await performTestOnce() : performManualCheck();
+    let { result, responseTime, status } = !site.isManualCheck ? await performTestOnce() : await performManualCheck();
     /**
      * If the site is down, we perform the test 2 more times to make
      * sure that it's not a false alarm
