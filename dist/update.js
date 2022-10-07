@@ -242,12 +242,16 @@ const update = async (shouldCommit = false) => {
                 return { result, responseTime, status };
             }
         };
-        let { result, responseTime, status } = await performTestOnce();
+        const performManualCheck = () => {
+            const status = "up";
+            return { result: { httpCode: 200 }, responseTime: (0).toFixed(0), status };
+        };
+        let { result, responseTime, status } = !site.isManualCheck ? await performTestOnce() : performManualCheck();
         /**
          * If the site is down, we perform the test 2 more times to make
          * sure that it's not a false alarm
          */
-        if (status === "down" || status === "degraded") {
+        if (!site.isManualCheck && (status === "down" || status === "degraded")) {
             wait(1000);
             const secondTry = await performTestOnce();
             if (secondTry.status === "up") {
