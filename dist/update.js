@@ -242,11 +242,32 @@ const update = async (shouldCommit = false) => {
                 return { result, responseTime, status };
             }
         };
-        const performManualCheck = () => {
-            const status = "up";
-            return { result: { httpCode: 200 }, responseTime: (0).toFixed(0), status };
+        const performManualCheck = async () => {
+            let status = "up";
+            let code = 200;
+            const labels = ['status-switch', slug];
+            let relevantIssues = [];
+            for (const label of labels) {
+                const labeledIssues = await octokit.issues.listForRepo({
+                    owner,
+                    repo,
+                    state: "open",
+                    filter: "all",
+                    sort: "created",
+                    direction: "desc",
+                    labels: label,
+                });
+                relevantIssues.push(labeledIssues.data.map(i => i.html_url));
+            }
+            ;
+            const allLabelsMatchedIssues = relevantIssues.reduce((a, b) => a.filter((c) => b.includes(c)));
+            if (allLabelsMatchedIssues.length) {
+                status = "down";
+                code = 418;
+            }
+            return { result: { httpCode: code }, responseTime: (0).toFixed(0), status };
         };
-        let { result, responseTime, status } = !site.isManualCheck ? await performTestOnce() : performManualCheck();
+        let { result, responseTime, status } = !site.isManualCheck ? await performTestOnce() : await performManualCheck();
         /**
          * If the site is down, we perform the test 2 more times to make
          * sure that it's not a false alarm
