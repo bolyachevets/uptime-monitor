@@ -265,8 +265,35 @@ export const update = async (shouldCommit = false) => {
         responseTime: string;
         status: "up" | "down" | "degraded";
       } => {
-        const status = "up";
-        return { result: { httpCode: 200 }, responseTime: (0).toFixed(0), status };
+        let status = "up";
+        let code = 200;
+
+        const labels = ['status-switch', slug]
+
+        let relevantIssues: Array<any> = [];
+
+        for (const label of labels) {
+          const labeledIssues = await octokit.issues.listForRepo({
+            owner: site.owner,
+            repo: site.repo,
+            state: "open",
+            filter: "all",
+            since: issue.created_at,
+            sort: "created",
+            direction: "desc",
+            labels: label,
+          });
+          relevantIssues.push(labeledIssues.data.map(i => i.html_url));
+        };
+
+        const allLabelsMatchedIssues = relevantIssues.reduce((a, b) => a.filter((c: String) => b.includes(c)));
+
+        if (allLabelsMatchedIssues.length) {
+          status = "down";
+          code = "418"
+        }
+
+        return { result: { httpCode: code }, responseTime: (0).toFixed(0), status };
     };
 
     let { result, responseTime, status } = !site.isManualCheck ? await performTestOnce() : performManualCheck();
