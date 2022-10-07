@@ -257,10 +257,16 @@ export const update = async (shouldCommit = false) => {
       }
     };
 
-    const performManualCheck = () => {
-      const responseTime = 0;
-      const status = "up";
-      return { result: { httpCode: 200 }, responseTime, status };
+    const performManualCheck = ():
+      {
+        result: {
+          httpCode: number;
+        };
+        responseTime: string;
+        status: "up" | "down" | "degraded";
+      } => {
+        const status = "up";
+        return { result: { httpCode: 200 }, responseTime: (0).toFixed(0), status };
     };
 
     let { result, responseTime, status } = !site.isManualCheck ? await performTestOnce() : performManualCheck();
