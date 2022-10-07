@@ -257,14 +257,13 @@ export const update = async (shouldCommit = false) => {
       }
     };
 
-    const performManualCheck = async ():
-      {
-        result: {
-          httpCode: number;
-        };
-        responseTime: string;
-        status: "up" | "down" | "degraded";
-      } => {
+    const performManualCheck = async (): Promise<{
+      result: {
+        httpCode: number;
+      };
+      responseTime: string;
+      status: "up" | "down" | "degraded";
+    }> => {
         let status = "up";
         let code = 200;
 
@@ -274,11 +273,10 @@ export const update = async (shouldCommit = false) => {
 
         for (const label of labels) {
           const labeledIssues = await octokit.issues.listForRepo({
-            owner: site.owner,
-            repo: site.repo,
+            owner,
+            repo,
             state: "open",
             filter: "all",
-            since: issue.created_at,
             sort: "created",
             direction: "desc",
             labels: label,
