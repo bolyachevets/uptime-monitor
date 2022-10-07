@@ -264,7 +264,7 @@ export const update = async (shouldCommit = false) => {
       responseTime: string;
       status: "up" | "down" | "degraded";
     }> => {
-        let status = "up";
+        let status: "up" | "down" | "degraded" = "up";
         let code = 200;
 
         const labels = ['status-switch', slug]
@@ -288,7 +288,7 @@ export const update = async (shouldCommit = false) => {
 
         if (allLabelsMatchedIssues.length) {
           status = "down";
-          code = "418"
+          code = 418;
         }
 
         return { result: { httpCode: code }, responseTime: (0).toFixed(0), status };
