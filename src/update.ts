@@ -516,7 +516,7 @@ generator: Upptime <https://github.com/upptime/upptime>
                   direction: "desc",
                   labels: label,
                 });
-                relevantIssues.push(labeledIssues.data.map(i => i.html_url));
+                relevantIssues.push(labeledIssues.data.map(i => "[" + i.title + "](" + i.html_url + ")"));
               };
 
               const allLabelsMatchedIssues = relevantIssues.reduce((a, b) => a.filter((c: String) => b.includes(c)));
